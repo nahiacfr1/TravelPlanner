@@ -170,6 +170,16 @@ function EditarMaleta() {
     }
   };
 
+  const onDragEnd = (result: DropResult) => {
+    if (!result.destination || !maleta) return;
+    const items = Array.from(maleta.items);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    const nuevaMaleta = { ...maleta, items };
+    setMaleta(nuevaMaleta);
+    guardar(nuevaMaleta);
+  };
+
   if (!maleta) return null;
   const itemsValidos = maleta.items.filter(
     (item) => item && typeof item.nombre === "string" && item.nombre.trim() !== ""
