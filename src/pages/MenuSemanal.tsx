@@ -84,38 +84,51 @@ function MenuSemanal() {
     }
   };
 
-  const prepararListaCompra = () => {
-    const recetasEnMenu = new Set<string>();
-    menus.forEach((dia) => {
-      ["desayuno", "comida", "cena"].forEach((campo) => {
-        const valor = dia[campo as keyof DiaMenu];
-        if (valor) recetasEnMenu.add(valor);
-      });
+const prepararListaCompra = () => {
+  const recetasEnMenu = new Set<string>();
+  menus.forEach((dia) => {
+    ["desayuno", "comida", "cena"].forEach((campo) => {
+      const valor = dia[campo as keyof DiaMenu];
+      if (valor) recetasEnMenu.add(valor);
     });
+  });
 
-    const listaRecetas = JSON.parse(localStorage.getItem("recetas") || "[]");
+  const listaRecetas = JSON.parse(localStorage.getItem("recetas") || "[]");
 
-    const ingredientes = new Set<string>();
-    listaRecetas.forEach((receta: any) => {
-      if (recetasEnMenu.has(receta.nombre)) {
+  const ingredientes = new Set<string>();
+  listaRecetas.forEach((receta: any) => {
+    if (recetasEnMenu.has(receta.nombre)) {
+      if (typeof receta.ingredientes === "string") {
         receta.ingredientes
-  .split("\n")
-  .map((linea: string) => linea.trim())
-  .filter((linea: string) => linea !== "")
-  .forEach((ing: string) => ingredientes.add(ing));
-
-
+          .split("\n")
+          .map((linea: string) => linea.trim())
+          .filter((linea: string) => linea !== "")
+          .forEach((ing: string) => ingredientes.add(ing));
       }
-    });
-
-    // Guardamos lista básica en localStorage para que la recoja ListaCompra
-    if (id) {
-      localStorage.setItem(`listaCompra_${id}`, JSON.stringify([...ingredientes]));
     }
+  });
 
-    // Redirige a la nueva pantalla
-    navigate(`/lista-compra/${id}`);
+  // Creamos la nueva lista
+  const idLista = Date.now().toString();
+  const nuevaLista = {
+    id: idLista,
+    nombre: "Lista desde menú",
+    elementos: [...ingredientes].map((nombre) => ({
+      nombre,
+      completado: false,
+    })),
   };
+
+  // Guardamos la lista en la colección del viaje
+  const key = `listaCompraList_${id}`;
+  const existentes = JSON.parse(localStorage.getItem(key) || "[]");
+  const actualizadas = [...existentes, nuevaLista];
+  localStorage.setItem(key, JSON.stringify(actualizadas));
+
+  // Redirigir a esa nueva lista
+  navigate(`/lista-compra/${id}/${idLista}`);
+};
+
 
   return (
     <div className="menu-semanal">

@@ -7,39 +7,49 @@ interface ElementoCompra {
   completado: boolean;
 }
 
+interface ListaCompra {
+  id: string;
+  nombre: string;
+  elementos: ElementoCompra[];
+}
+
 function ListaCompra() {
-  const { id } = useParams();
+  const { viajeId, idLista } = useParams();
   const navigate = useNavigate();
 
-  const [nombreLista, setNombreLista] = useState("Mi lista de la compra");
+  const [nombreLista, setNombreLista] = useState("Mi lista");
   const [elementos, setElementos] = useState<ElementoCompra[]>([]);
   const [nuevoElemento, setNuevoElemento] = useState("");
 
-  // Cargar al iniciar
+  // Cargar lista al iniciar
   useEffect(() => {
-    if (!id) return;
+    if (!viajeId || !idLista) return;
 
-    const almacenada = JSON.parse(localStorage.getItem(`listaCompraDetallada_${id}`) || "null");
-    if (almacenada) {
-      setNombreLista(almacenada.nombre || "Mi lista de la compra");
-      setElementos(almacenada.elementos || []);
-    } else {
-      // Lista generada desde MenuSemanal
-      const basica = JSON.parse(localStorage.getItem(`listaCompra_${id}`) || "[]");
-      const inicial = basica.map((item: string) => ({ nombre: item, completado: false }));
-      setElementos(inicial);
+    const raw = localStorage.getItem(`listaCompraList_${viajeId}`);
+    if (raw) {
+      const data: ListaCompra[] = JSON.parse(raw);
+      const lista = data.find((l) => l.id === idLista);
+      if (lista) {
+        setNombreLista(lista.nombre);
+        setElementos(lista.elementos);
+      }
     }
-  }, [id]);
+  }, [viajeId, idLista]);
 
-  // Guardar automáticamente
+  // Guardar en localStorage al cambiar
   useEffect(() => {
-    if (!id) return;
-    const data = {
-      nombre: nombreLista,
-      elementos,
-    };
-    localStorage.setItem(`listaCompraDetallada_${id}`, JSON.stringify(data));
-  }, [nombreLista, elementos, id]);
+    if (!viajeId || !idLista) return;
+
+    const raw = localStorage.getItem(`listaCompraList_${viajeId}`);
+    if (!raw) return;
+
+    const data: ListaCompra[] = JSON.parse(raw);
+    const actualizadas = data.map((l) =>
+      l.id === idLista ? { ...l, nombre: nombreLista, elementos } : l
+    );
+
+    localStorage.setItem(`listaCompraList_${viajeId}`, JSON.stringify(actualizadas));
+  }, [nombreLista, elementos, viajeId, idLista]);
 
   const añadirElemento = () => {
     if (!nuevoElemento.trim()) return;
@@ -59,10 +69,16 @@ function ListaCompra() {
     setElementos(copia);
   };
 
-  const borrarLista = () => {
-    if (!id) return;
-    localStorage.removeItem(`listaCompraDetallada_${id}`);
-    setElementos([]);
+  const borrarListaCompleta = () => {
+    if (!viajeId || !idLista) return;
+
+    const raw = localStorage.getItem(`listaCompraList_${viajeId}`);
+    if (!raw) return;
+
+    const data: ListaCompra[] = JSON.parse(raw);
+    const actualizadas = data.filter((l) => l.id !== idLista);
+    localStorage.setItem(`listaCompraList_${viajeId}`, JSON.stringify(actualizadas));
+    navigate(`/viaje/${viajeId}/listas-compra`);
   };
 
   const progreso = elementos.length
@@ -112,8 +128,8 @@ function ListaCompra() {
       </ul>
 
       {elementos.length > 0 && (
-        <button className="borrar-lista" onClick={borrarLista}>
-          🗑️ Eliminar lista completa
+        <button className="borrar-lista" onClick={borrarListaCompleta}>
+          🗑️ Eliminar esta lista
         </button>
       )}
     </div>

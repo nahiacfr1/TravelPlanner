@@ -59,3 +59,25 @@ ul {
   background-color: #6fa86f;
   color: white;
 }
+.nueva-lista {
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 10px;
+}
+
+.nueva-lista input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #aac9a0;
+  border-radius: 5px;
+  background-color: #f2f7f0;
+}
+
+.nueva-lista button {
+  background-color: #6fa86f;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
