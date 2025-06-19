@@ -26,7 +26,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/viaje/:id/menu-semanal/:menuId" element={<MenuSemanal />} />
         <Route path="/viaje/:id/ruta-clima" element={<RutaClima />} />
-        <Route path="/lista-compra/:menuId" element={<ListaCompra />} />
+        <Route path="/lista-compra/:viajeId/:idLista" element={<ListaCompra />} />
         <Route path="/crear-viaje" element={<CrearViaje />} />
         <Route path="/recetas" element={<Recetas />} />
         <Route path="/viaje/:id" element={<ViajeDashboard />} />
