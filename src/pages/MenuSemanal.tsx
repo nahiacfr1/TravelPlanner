@@ -96,10 +96,9 @@ function MenuSemanal() {
       });
     });
 
-    const listaRecetas = JSON.parse(localStorage.getItem("recetas") || "[]");
     const ingredientes = new Set<string>();
 
-    listaRecetas.forEach((receta: any) => {
+    recetas.forEach((receta) => {
       if (recetasEnMenu.has(receta.nombre)) {
         (receta.ingredientes || "")
           .split("\n")
@@ -158,7 +157,7 @@ function MenuSemanal() {
         {menus.map((dia) => (
           <div key={dia.fecha} className="dia-menu">
             <h3>{dia.fecha}</h3>
-            {(["desayuno", "comida", "cena"] as (keyof DiaMenu)[]).map((campo) => (
+            {["desayuno", "comida", "cena"].map((campo) => (
               <Droppable droppableId={`${dia.fecha}|${campo}`} key={campo}>
                 {(provided, snapshot) => (
                   <div
@@ -170,8 +169,8 @@ function MenuSemanal() {
                       {campo.charAt(0).toUpperCase() + campo.slice(1)}:
                       <input
                         type="text"
-                        value={dia[campo]}
-                        onChange={(e) => actualizarMenu(dia.fecha, campo, e.target.value)}
+                        value={dia[campo as keyof DiaMenu]}
+                        onChange={(e) => actualizarMenu(dia.fecha, campo as keyof DiaMenu, e.target.value)}
                       />
                     </label>
                     {provided.placeholder}
