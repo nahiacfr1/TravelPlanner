@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./MenuSemanal.css";
 import {
@@ -23,10 +23,9 @@ interface Receta {
 
 function MenuSemanal() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [menus, setMenus] = useState<DiaMenu[]>([]);
   const [recetas, setRecetas] = useState<Receta[]>([]);
-  const [listaCompra, setListaCompra] = useState<string[]>([]);
-  const [mostrarLista, setMostrarLista] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -85,7 +84,7 @@ function MenuSemanal() {
     }
   };
 
-  const generarListaCompra = () => {
+  const prepararListaCompra = () => {
     const recetasEnMenu = new Set<string>();
     menus.forEach((dia) => {
       ["desayuno", "comida", "cena"].forEach((campo) => {
@@ -103,8 +102,13 @@ function MenuSemanal() {
       }
     });
 
-    setListaCompra([...ingredientes]);
-    setMostrarLista(true);
+    // Guardamos lista básica en localStorage para que la recoja ListaCompra
+    if (id) {
+      localStorage.setItem(`listaCompra_${id}`, JSON.stringify([...ingredientes]));
+    }
+
+    // Redirige a la nueva pantalla
+    navigate(`/lista-compra/${id}`);
   };
 
   return (
@@ -172,23 +176,8 @@ function MenuSemanal() {
       </DragDropContext>
 
       <div className="boton-lista-compra">
-        <button onClick={generarListaCompra}>🛒 Crear lista de la compra</button>
+        <button onClick={prepararListaCompra}>🛒 Ir a la lista de la compra</button>
       </div>
-
-      {mostrarLista && (
-        <div className="lista-compra">
-          <h2>📝 Lista de la Compra</h2>
-          <ul>
-            {listaCompra.map((item, i) => (
-              <li key={i}>
-                <label>
-                  <input type="checkbox" /> {item}
-                </label>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
     </div>
   );
 }

@@ -12,7 +12,7 @@ import Recetas from "./pages/Recetas";
 import PlanificarMenu from "./pages/PlanificarMenu";
 import MenuSemanal from "./pages/MenuSemanal";
 import RutaClima from "./pages/RutaClima";
-
+import ListaCompra from "./pages/ListaCompra";
 
 function App() {
   return (
@@ -26,7 +26,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/viaje/:id/menu-semanal" element={<MenuSemanal />} />
         <Route path="/viaje/:id/ruta-clima" element={<RutaClima />} />
-
+        <Route path="/lista-compra/:id" element={<ListaCompra />} />
         <Route path="/crear-viaje" element={<CrearViaje />} />
         <Route path="/recetas" element={<Recetas />} />
         <Route path="/viaje/:id" element={<ViajeDashboard />} />

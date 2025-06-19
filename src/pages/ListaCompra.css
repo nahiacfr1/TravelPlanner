@@ -1,0 +1,115 @@
+.lista-compra-pantalla {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: "Segoe UI", sans-serif;
+  background-color: #f6faf4;
+}
+
+.volver {
+  background: none;
+  border: none;
+  color: #4c6b3c;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.titulo-lista {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2e4e1d;
+  border: none;
+  background: none;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.barra-progreso {
+  height: 10px;
+  background-color: #d6e5d1;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.barra-progreso .relleno {
+  height: 100%;
+  background-color: #6fa86f;
+  transition: width 0.3s ease;
+}
+
+.porcentaje {
+  font-size: 0.9rem;
+  color: #3a5930;
+  margin-bottom: 1.5rem;
+}
+
+.añadir-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.añadir-form input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #a5bda2;
+  border-radius: 5px;
+  background-color: #f2f8f1;
+}
+
+.añadir-form button {
+  background-color: #6fa86f;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.lista-elementos {
+  list-style: none;
+  padding: 0;
+}
+
+.lista-elementos li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #e9f3e6;
+  border: 1px solid #c1d4b9;
+  border-radius: 5px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  transition: background 0.2s;
+}
+
+.lista-elementos li.completado {
+  background-color: #cbe5cb;
+  text-decoration: line-through;
+  opacity: 0.8;
+}
+
+.lista-elementos input[type="checkbox"] {
+  margin-right: 10px;
+  accent-color: #6fa86f;
+}
+
+.eliminar {
+  background: none;
+  border: none;
+  color: #a33;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.borrar-lista {
+  margin-top: 1.5rem;
+  padding: 10px 16px;
+  background-color: #b94c4c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
