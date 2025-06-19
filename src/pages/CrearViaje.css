@@ -1,0 +1,42 @@
+.crear-container {
+  height: 100vh;
+  background-color: #cfddc8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.crear-box {
+  background-color: white;
+  padding: 40px;
+  border-radius: 20px;
+  width: 350px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.crear-box h1 {
+  text-align: center;
+  color: #768f74;
+}
+
+.crear-box input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.crear-box button {
+  background-color: #768f74;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.crear-box button:hover {
+  background-color: #5c725b;
+}

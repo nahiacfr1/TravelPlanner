@@ -1,0 +1,83 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.min-h-screen {
+  background-color: #cfddc8;
+  padding: 2rem;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+}
+
+.panel-edicion {
+  background-color: white;
+  border-radius: 20px;
+  padding: 2rem;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.panel-edicion h1 {
+  font-size: 1.8rem;
+  color: #5c725b;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.panel-edicion h2 {
+  font-size: 1.2rem;
+  color: #768f74;
+  margin-bottom: 1rem;
+}
+
+.panel-edicion ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+
+.panel-edicion li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 1rem;
+  color: #333;
+}
+
+.panel-edicion input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #768f74;
+}
+
+.form-agregar {
+  display: flex;
+  gap: 10px;
+  margin-top: 1rem;
+}
+
+.form-agregar input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #f7f7f7;
+}
+
+.form-agregar button {
+  background-color: #768f74;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.form-agregar button:hover {
+  background-color: #5f765e;
+}

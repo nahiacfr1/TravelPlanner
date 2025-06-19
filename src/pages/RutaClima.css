@@ -1,0 +1,73 @@
+/* src/pages/RutaClima.css */
+
+.ruta-clima {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #f7f8fa;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.ruta-clima h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.ruta-clima p {
+  margin-bottom: 1.5rem;
+  color: #555;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.inputs input {
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.inputs button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.inputs button:hover {
+  background-color: #357ab8;
+}
+
+.ruta-preview {
+  background-color: #fff;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.ruta-preview h2 {
+  margin-bottom: 1rem;
+}
+
+.ruta-preview ul {
+  list-style: none;
+  padding: 0;
+}
+
+.ruta-preview li {
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
+}
+.leaflet-routing-container {
+  display: none !important;
+}

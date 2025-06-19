@@ -1,0 +1,59 @@
+/* src/pages/PlanificarMenu.css */
+.planificador {
+  max-width: 500px;
+  margin: 60px auto;
+  padding: 2rem;
+  background-color: #e6f4ea;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.planificador h1 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #2f5d3f;
+  text-align: center;
+}
+
+.planificador label {
+  display: block;
+  margin-bottom: 1rem;
+  color: #3b634d;
+  font-weight: 600;
+}
+
+.planificador input[type="date"] {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #c1daca;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #f9fdfb;
+  color: #3c3c3c;
+}
+
+.planificador button {
+  width: 100%;
+  padding: 0.8rem;
+  margin-top: 1.2rem;
+  background-color: #9cd1ae;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.planificador button:hover {
+  background-color: #7fbd97;
+}
+
+.error {
+  color: #d44848;
+  font-weight: bold;
+  margin-top: 0.5rem;
+  text-align: center;
+}

@@ -1,0 +1,45 @@
+.leaflet-control-geocoder {
+  box-shadow: 0 1px 7px rgba(0,0,0,0.4);
+  background: #fff;
+  border-radius: 4px;
+  padding: 6px;
+}
+
+.leaflet-control-geocoder-form {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.leaflet-control-geocoder-form input {
+  border: none;
+  margin: 0;
+  padding: 4px 6px;
+  width: 160px;
+}
+
+.leaflet-control-geocoder-icon {
+  background-image: url(data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' fill='%23333' viewBox='0 0 24 24'><path d='M10.9 2a8.9 8.9 0 0 0-8.9 8.9c0 3.8 5.5 10.6 8 13.5.3.4.8.4 1.1 0 2.6-3 8-9.7 8-13.5A8.9 8.9 0 0 0 10.9 2zm0 13.1a4.2 4.2 0 1 1 0-8.5 4.2 4.2 0 0 1 0 8.5z'/></svg>);
+  background-size: 24px 24px;
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.leaflet-control-geocoder-alternatives {
+  margin-top: 6px;
+  list-style: none;
+  padding-left: 0;
+  font-size: 90%;
+  overflow-y: auto;
+  max-height: 200px;
+}
+
+.leaflet-control-geocoder-alternatives li {
+  padding: 2px 4px;
+  cursor: pointer;
+}
+
+.leaflet-control-geocoder-alternatives li:hover {
+  background: #f0f0f0;
+}

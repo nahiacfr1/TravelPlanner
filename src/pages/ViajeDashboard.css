@@ -1,0 +1,93 @@
+.viaje-dashboard {
+  min-height: 100vh;
+  background-color: #e9f5e5;
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.panel {
+  background-color: #a8c7a0;
+  border-radius: 30px;
+  padding: 40px;
+  width: 100%;
+  max-width: 800px;
+  color: #fff;
+}
+
+.panel h1 {
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 30px;
+}
+
+.seccion {
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  color: #333;
+  margin-bottom: 25px;
+}
+
+.seccion h2 {
+  color: #5a7c56;
+  margin-bottom: 15px;
+}
+
+.maletas-input {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.maletas-input input,
+.maletas-input select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.maletas-input button {
+  background-color: #5a7c56;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.maletas-input button:hover {
+  background-color: #466342;
+}
+.maleta-link {
+  cursor: pointer;
+  color: #4a5f48;
+  font-weight: bold;
+  padding: 6px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.maleta-link:hover {
+  background-color: #dbe8d5;
+}
+.botones-menu {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.botones-menu button {
+  padding: 0.5rem 1rem;
+  background-color: #f4f4f4;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.botones-menu button:hover {
+  background-color: #e0e0e0;
+}
+
