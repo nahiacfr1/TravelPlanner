@@ -79,3 +79,59 @@
   border-radius: 6px;
   cursor: pointer;
 }
+.menus-existentes {
+  background-color: #eef6ed;
+  border: 1px solid #c5d7c0;
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+}
+
+.menus-existentes h2 {
+  margin-bottom: 1rem;
+  color: #2e4e1d;
+  font-size: 1.2rem;
+}
+
+.menus-existentes ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menus-existentes li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f9fcf8;
+  border: 1px solid #d2e0ce;
+  border-radius: 6px;
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.7rem;
+  font-family: "Segoe UI", sans-serif;
+  color: #3a5930;
+}
+
+.menus-existentes button {
+  background-color: #6fa86f;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-left: 10px;
+  transition: background 0.2s ease;
+}
+
+.menus-existentes button:hover {
+  background-color: #5e9561;
+}
+
+.menus-existentes button:last-child {
+  background-color: #b94c4c;
+}
+
+.menus-existentes button:last-child:hover {
+  background-color: #a03f3f;
+}
