@@ -71,7 +71,6 @@ function ListasCompraDashboard() {
           onChange={(e) => setNuevoNombre(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && crearNuevaLista()}
         />
-        <button onClick={crearNuevaLista}>➕ Crear nueva lista</button>
       </div>
 
       {listas.length === 0 ? (

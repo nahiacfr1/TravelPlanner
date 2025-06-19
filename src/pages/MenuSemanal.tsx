@@ -87,35 +87,46 @@ function MenuSemanal() {
     }
   };
 
-  const prepararListaCompra = () => {
-    const recetasEnMenu = new Set<string>();
-    menus.forEach((dia) => {
-      ["desayuno", "comida", "cena"].forEach((campo) => {
-        const valor = dia[campo as keyof DiaMenu];
-        if (valor) recetasEnMenu.add(valor);
-      });
+const prepararListaCompra = () => {
+  // Paso 1: Crear un Set con los nombres de recetas en el menú (normalizados)
+  const recetasEnMenu = new Set<string>();
+  menus.forEach((dia) => {
+    ["desayuno", "comida", "cena"].forEach((campo) => {
+      const valor = dia[campo as keyof DiaMenu]?.trim().toLowerCase();
+      if (valor) recetasEnMenu.add(valor);
     });
+  });
 
-    const ingredientes = new Set<string>();
+  // Paso 2: Buscar en TODAS las recetas las que coincidan por nombre (normalizado)
+  const ingredientes = new Set<string>();
+  const listaRecetasRaw = JSON.parse(localStorage.getItem("recetas") || "[]");
 
-    recetas.forEach((receta) => {
-      const estaEnMenu = [...recetasEnMenu].some((nombre) =>
-        nombre.trim().toLowerCase() === receta.nombre.trim().toLowerCase()
-      );
-      if (estaEnMenu) {
-        (receta.ingredientes || "")
-          .split("\n")
-          .map((linea: string) => linea.trim())
-          .filter((linea: string) => linea !== "")
-          .forEach((ing: string) => ingredientes.add(ing));
-      }
-    });
-
-    if (menuId) {
-      localStorage.setItem(`listaCompra_${menuId}`, JSON.stringify([...ingredientes]));
-      navigate(`/lista-compra/${menuId}`);
+  listaRecetasRaw.forEach((receta: any) => {
+    const nombreNormalizado = receta.nombre?.trim().toLowerCase();
+    if (recetasEnMenu.has(nombreNormalizado)) {
+      const lista = (receta.ingredientes || "")
+        .split("\n")
+        .map((i: string) => i.trim())
+        .filter((i: string) => i !== "");
+      lista.forEach((ing: string) => ingredientes.add(ing));
     }
-  };
+  });
+
+  // Paso 3: Guardar la lista
+  if (menuId && id) {
+    const keyListas = `listaCompraList_${id}`;
+    const listasExistentes = JSON.parse(localStorage.getItem(keyListas) || "[]");
+    const nuevaLista = {
+      id: menuId,
+      nombre: `Lista de compra del menú ${menuId}`,
+      elementos: [...ingredientes].map((i) => ({ nombre: i, completado: false })),
+    };
+    const actualizadas = [...listasExistentes.filter((l: any) => l.id !== menuId), nuevaLista];
+    localStorage.setItem(keyListas, JSON.stringify(actualizadas));
+    navigate(`/lista-compra/${id}/${menuId}`);
+  }
+};
+
 
   return (
     <div className="menu-semanal">
