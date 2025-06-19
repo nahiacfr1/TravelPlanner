@@ -1,0 +1,61 @@
+.listas-compra-dashboard {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: "Segoe UI", sans-serif;
+  background-color: #f9fcf8;
+}
+
+.volver {
+  background: none;
+  border: none;
+  color: #4c6b3c;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  color: #2e4e1d;
+  margin-bottom: 1.5rem;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.lista-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #eef6ed;
+  border: 1px solid #c5d7c0;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.lista-item p {
+  margin: 0.5rem 0 0;
+  color: #3a5930;
+}
+
+.acciones button {
+  margin-left: 10px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.acciones .eliminar {
+  background-color: #b94c4c;
+  color: white;
+}
+
+.acciones button:not(.eliminar) {
+  background-color: #6fa86f;
+  color: white;
+}

@@ -13,7 +13,7 @@ import PlanificarMenu from "./pages/PlanificarMenu";
 import MenuSemanal from "./pages/MenuSemanal";
 import RutaClima from "./pages/RutaClima";
 import ListaCompra from "./pages/ListaCompra";
-
+import ListasCompraDashboard from "./pages/ListasCompraDashboard";
 function App() {
   return (
     <Routes>
@@ -30,6 +30,7 @@ function App() {
         <Route path="/crear-viaje" element={<CrearViaje />} />
         <Route path="/recetas" element={<Recetas />} />
         <Route path="/viaje/:id" element={<ViajeDashboard />} />
+        <Route path="/viaje/:id/listas-compra" element={<ListasCompraDashboard />} />
         <Route path="/viaje/:id/maleta/:nombreMaleta" element={<EditarMaleta />} />
       </Route>
     </Routes>
