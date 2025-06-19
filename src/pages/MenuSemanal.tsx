@@ -130,6 +130,7 @@ const prepararListaCompra = () => {
 
   return (
     <div className="menu-semanal">
+      <button className="volver" onClick={() => navigate(-1)}>← Volver</button>
       <h1>Menú Diario del Viaje</h1>
 
       <DragDropContext onDragEnd={onDragEnd}>

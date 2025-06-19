@@ -105,6 +105,7 @@ function PlanificarMenu() {
 
   return (
     <div className="planificador">
+      <button className="volver" onClick={() => navigate(-1)}>← Volver</button>
       <h1>Planificar Menú del Viaje</h1>
 
       {menusGuardados.length > 0 && (

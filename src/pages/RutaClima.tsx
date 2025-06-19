@@ -5,8 +5,10 @@ import "leaflet-routing-machine";
 import "leaflet/dist/leaflet.css";
 import "leaflet-control-geocoder";
 import "./RutaClima.css";
+import { useNavigate } from "react-router-dom";
 
 function RutaClima() {
+const navigate = useNavigate();
   const [map, setMap] = useState<L.Map | null>(null);
   const [rutas, setRutas] = useState<any[]>([]);
   const [rutaSeleccionadaIndex, setRutaSeleccionadaIndex] = useState<number | null>(null);
@@ -172,6 +174,7 @@ function RutaClima() {
 
   return (
     <div className="ruta-clima">
+        <button className="volver" onClick={() => navigate(-1)}>← Volver</button>
       <h1>🌦️ Ruta y Clima del Viaje</h1>
       <p>Introduce origen, destino, fecha y hora del viaje. Se mostrarán las rutas disponibles. Haz clic en una para ver el clima estimado durante el trayecto.</p>
 

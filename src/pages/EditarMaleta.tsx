@@ -146,6 +146,7 @@ const itemsValidos = maleta.items.filter(
   return (
     <div className="min-h-screen">
       <div className="panel-edicion">
+        <button className="volver" onClick={() => navigate(-1)}>← Volver</button>
         <h1>Editar maleta: {maleta.nombre}</h1>
         <p className="progreso">
           Progreso: {itemsMarcados} / {totalItems} ítems embalados

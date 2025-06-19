@@ -1,5 +1,6 @@
 // src/pages/Recetas.tsx
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Recetas.css";
 
 
@@ -10,6 +11,7 @@ interface Receta {
 }
 
 function Recetas() {
+  const navigate = useNavigate();
   const [recetas, setRecetas] = useState<Receta[]>([]);
   const [nueva, setNueva] = useState<Receta>({ nombre: "", ingredientes: "", preparacion: "" });
   const [editIndex, setEditIndex] = useState<number | null>(null);
@@ -52,6 +54,7 @@ function Recetas() {
 
   return (
     <div className="recetas-page">
+      <button className="volver" onClick={() => navigate(-1)}>← Volver</button>
       <h1>Mis Recetas</h1>
       <div className="formulario-receta">
         <input

@@ -22,6 +22,7 @@ const PLANTILLAS_MALETA: Record<string, string[]> = {
   "Maleta mediana": ["Ropa interior", "Pantalones", "Camisetas"],
   "Maleta pequeña": ["Camiseta", "Pantalón corto", "Muda extra"],
   "Bolso de mano": ["Móvil", "Cargador", "Gafas de sol", "Libro"],
+  "Botiquin": ["Ibuprofeno", "Paracetamol"],
   "Neceser / Maquillaje": ["Cepillo", "Maquillaje", "Pasta de dientes", "Peine"],
   "Electrónica": ["Portátil", "Auriculares", "Cargadores"],
   "Comida / Snacks": ["Botella de agua", "Fruta", "Snacks"],
