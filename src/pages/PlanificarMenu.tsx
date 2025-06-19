@@ -9,9 +9,7 @@ function PlanificarMenu() {
   const [fechaInicio, setFechaInicio] = useState("");
   const [fechaFin, setFechaFin] = useState("");
   const [errores, setErrores] = useState("");
-  const [bloquesExistentes, setBloquesExistentes] = useState<
-    { inicio: string; fin: string }[] | null
-  >(null);
+  const [menusGuardados, setMenusGuardados] = useState<any[]>([]);
 
   useEffect(() => {
     if (!id) return;
@@ -19,11 +17,8 @@ function PlanificarMenu() {
     if (raw) {
       try {
         const data = JSON.parse(raw);
-        if (Array.isArray(data) && data.length > 0) {
-          const ultimo = data[data.length - 1];
-          if (ultimo?.bloques?.length) {
-            setBloquesExistentes(ultimo.bloques);
-          }
+        if (Array.isArray(data)) {
+          setMenusGuardados(data);
         }
       } catch {
         console.error("Error al leer bloques de menú.");
@@ -100,31 +95,32 @@ function PlanificarMenu() {
     }
   };
 
+  const eliminarMenu = (menuId: string) => {
+    if (!id) return;
+    const key = `menusViajeList_${id}`;
+    const actualizados = menusGuardados.filter((m) => m.id !== menuId);
+    localStorage.setItem(key, JSON.stringify(actualizados));
+    setMenusGuardados(actualizados);
+  };
+
   return (
     <div className="planificador">
       <h1>Planificar Menú del Viaje</h1>
 
-      {bloquesExistentes && (
-        <div className="bloques-existentes">
-          <p>
-            Ya hay un menú planificado del {bloquesExistentes[0].inicio} al {" "}
-            {bloquesExistentes[bloquesExistentes.length - 1].fin}
-          </p>
-          <button
-            className="ver-menu"
-            onClick={() => {
-              const raw = localStorage.getItem(`menusViajeList_${id}`);
-              if (raw) {
-                const data = JSON.parse(raw);
-                if (data.length > 0) {
-                  const ultimo = data[data.length - 1];
-                  navigate(`/viaje/${id}/menu-semanal/${ultimo.id}`);
-                }
-              }
-            }}
-          >
-            📅 Ver menú planificado
-          </button>
+      {menusGuardados.length > 0 && (
+        <div className="menus-existentes">
+          <h2>🗂️ Menús guardados</h2>
+          <ul>
+            {menusGuardados.map((menu) => (
+              <li key={menu.id}>
+                <span>
+                  {menu.bloques[0].inicio} - {menu.bloques[menu.bloques.length - 1].fin}
+                </span>
+                <button onClick={() => navigate(`/viaje/${id}/menu-semanal/${menu.id}`)}>Ver</button>
+                <button onClick={() => eliminarMenu(menu.id)}>🗑️</button>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 
