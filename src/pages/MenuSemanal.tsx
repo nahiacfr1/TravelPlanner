@@ -122,6 +122,12 @@ function MenuSemanal() {
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="zona-recetas">
           <h2>📋 Recetas disponibles</h2>
+          <button
+            className="boton-ir-recetas"
+            onClick={() => navigate("/recetas")}
+          >
+            ➕ Añadir nueva receta
+          </button>
           <Droppable droppableId="recetas" direction="horizontal" isDropDisabled={true}>
             {(provided) => (
               <div
