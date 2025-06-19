@@ -18,12 +18,15 @@ interface DiaMenu {
 interface Receta {
   id: string;
   nombre: string;
+  ingredientes?: string[];
 }
 
 function MenuSemanal() {
   const { id } = useParams();
   const [menus, setMenus] = useState<DiaMenu[]>([]);
   const [recetas, setRecetas] = useState<Receta[]>([]);
+  const [listaCompra, setListaCompra] = useState<string[]>([]);
+  const [mostrarLista, setMostrarLista] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -33,7 +36,11 @@ function MenuSemanal() {
     const listaRecetas = JSON.parse(localStorage.getItem("recetas") || "[]");
 
     setRecetas(
-      listaRecetas.map((r: any, idx: number) => ({ id: idx.toString(), nombre: r.nombre }))
+      listaRecetas.map((r: any, idx: number) => ({
+        id: idx.toString(),
+        nombre: r.nombre,
+        ingredientes: r.ingredientes,
+      }))
     );
 
     const dias: DiaMenu[] = [];
@@ -69,7 +76,6 @@ function MenuSemanal() {
 
   const onDragEnd = (result: DropResult) => {
     const { destination, draggableId } = result;
-
     if (!destination) return;
 
     const [fecha, campo] = destination.droppableId.split("|");
@@ -77,6 +83,28 @@ function MenuSemanal() {
     if (receta) {
       actualizarMenu(fecha, campo as keyof DiaMenu, receta.nombre);
     }
+  };
+
+  const generarListaCompra = () => {
+    const recetasEnMenu = new Set<string>();
+    menus.forEach((dia) => {
+      ["desayuno", "comida", "cena"].forEach((campo) => {
+        const valor = dia[campo as keyof DiaMenu];
+        if (valor) recetasEnMenu.add(valor);
+      });
+    });
+
+    const listaRecetas = JSON.parse(localStorage.getItem("recetas") || "[]");
+
+    const ingredientes = new Set<string>();
+    listaRecetas.forEach((receta: any) => {
+      if (recetasEnMenu.has(receta.nombre)) {
+        receta.ingredientes?.forEach((ing: string) => ingredientes.add(ing));
+      }
+    });
+
+    setListaCompra([...ingredientes]);
+    setMostrarLista(true);
   };
 
   return (
@@ -94,11 +122,7 @@ function MenuSemanal() {
                 {...provided.droppableProps}
               >
                 {recetas.map((receta, index) => (
-                  <Draggable
-                    key={receta.id}
-                    draggableId={receta.id.toString()}
-                    index={index}
-                  >
+                  <Draggable key={receta.id} draggableId={receta.id} index={index}>
                     {(provided) => (
                       <div
                         className="receta-draggable"
@@ -146,6 +170,25 @@ function MenuSemanal() {
           </div>
         ))}
       </DragDropContext>
+
+      <div className="boton-lista-compra">
+        <button onClick={generarListaCompra}>🛒 Crear lista de la compra</button>
+      </div>
+
+      {mostrarLista && (
+        <div className="lista-compra">
+          <h2>📝 Lista de la Compra</h2>
+          <ul>
+            {listaCompra.map((item, i) => (
+              <li key={i}>
+                <label>
+                  <input type="checkbox" /> {item}
+                </label>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
