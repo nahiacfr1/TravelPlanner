@@ -1,8 +1,12 @@
-// src/pages/MenuSemanal.tsx (CORREGIDO Y FUNCIONAL)
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./MenuSemanal.css";
-import { DragDropContext, Droppable, Draggable, type DropResult } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  type DropResult,
+} from "react-beautiful-dnd";
 
 interface DiaMenu {
   fecha: string;
@@ -28,7 +32,9 @@ function MenuSemanal() {
     const almacenado = JSON.parse(localStorage.getItem(`menusViaje_${id}`) || "{}");
     const listaRecetas = JSON.parse(localStorage.getItem("recetas") || "[]");
 
-    setRecetas(listaRecetas.map((r: any, idx: number) => ({ id: idx.toString(), nombre: r.nombre })));
+    setRecetas(
+      listaRecetas.map((r: any, idx: number) => ({ id: idx.toString(), nombre: r.nombre }))
+    );
 
     const dias: DiaMenu[] = [];
     bloques.forEach((bloque: { inicio: string; fin: string }) => {
@@ -67,7 +73,7 @@ function MenuSemanal() {
     if (!destination) return;
 
     const [fecha, campo] = destination.droppableId.split("|");
-    const receta = recetas.find(r => r.id === draggableId);
+    const receta = recetas.find((r) => r.id === draggableId);
     if (receta) {
       actualizarMenu(fecha, campo as keyof DiaMenu, receta.nombre);
     }
@@ -82,9 +88,17 @@ function MenuSemanal() {
           <h2>📋 Recetas disponibles</h2>
           <Droppable droppableId="recetas" direction="horizontal" isDropDisabled={true}>
             {(provided) => (
-              <div className="recetas-lista" ref={provided.innerRef} {...provided.droppableProps}>
+              <div
+                className="recetas-lista"
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
                 {recetas.map((receta, index) => (
-                  <Draggable key={receta.id} draggableId={receta.id.toString()} index={index}>
+                  <Draggable
+                    key={receta.id}
+                    draggableId={receta.id.toString()}
+                    index={index}
+                  >
                     {(provided) => (
                       <div
                         className="receta-draggable"
@@ -108,8 +122,14 @@ function MenuSemanal() {
             <h3>{dia.fecha}</h3>
             {(["desayuno", "comida", "cena"] as (keyof DiaMenu)[]).map((campo) => (
               <Droppable droppableId={`${dia.fecha}|${campo}`} key={campo}>
-                {(provided) => (
-                  <div className="menu-bloque" ref={provided.innerRef} {...provided.droppableProps}>
+                {(provided, snapshot) => (
+                  <div
+                    className={`menu-bloque ${
+                      snapshot.isDraggingOver ? "dragging-over" : ""
+                    }`}
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                  >
                     <label>
                       {campo.charAt(0).toUpperCase() + campo.slice(1)}:
                       <input
