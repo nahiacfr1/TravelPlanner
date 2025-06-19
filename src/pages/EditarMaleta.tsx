@@ -1,3 +1,4 @@
+// src/pages/EditarMaleta.tsx
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
@@ -11,7 +12,7 @@ import "./EditarMaleta.css";
 interface Maleta {
   nombre: string;
   tipo: string;
-  items: { nombre: string; marcado: boolean }[];
+  items: { nombre: string; marcado: boolean; añadirLista?: boolean }[];
 }
 
 interface Viaje {
@@ -92,6 +93,18 @@ function EditarMaleta() {
     guardar(nuevaMaleta);
   };
 
+  const toggleAñadirLista = (nombre: string) => {
+    if (!maleta) return;
+    const nuevaMaleta = {
+      ...maleta,
+      items: maleta.items.map((item) =>
+        item.nombre === nombre ? { ...item, añadirLista: !item.añadirLista } : item
+      ),
+    };
+    setMaleta(nuevaMaleta);
+    guardar(nuevaMaleta);
+  };
+
   const guardar = (nuevaMaleta: Maleta) => {
     const activeUser = localStorage.getItem("activeUser")!;
     const users = JSON.parse(localStorage.getItem("users") || "{}");
@@ -118,25 +131,47 @@ function EditarMaleta() {
     if (!nuevoItem.trim() || !maleta) return;
     const nuevaMaleta = {
       ...maleta,
-      items: [...maleta.items, { nombre: nuevoItem.trim(), marcado: false }],
+      items: [...maleta.items, { nombre: nuevoItem.trim(), marcado: false, añadirLista: false }],
     };
     setNuevoItem("");
     setMaleta(nuevaMaleta);
     guardar(nuevaMaleta);
   };
 
-  const onDragEnd = (result: DropResult) => {
-    if (!result.destination || !maleta) return;
-    const items = Array.from(maleta.items);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-    const nuevaMaleta = { ...maleta, items };
-    setMaleta(nuevaMaleta);
-    guardar(nuevaMaleta);
+  const añadirAListaCompra = () => {
+    if (!id || !maleta) return;
+    const seleccionados = maleta.items
+      .filter((item) => item.añadirLista)
+      .map((item) => item.nombre);
+
+    if (seleccionados.length === 0) {
+      alert("Selecciona al menos un ítem para añadir a la lista de la compra.");
+      return;
+    }
+
+    const clave = `listaCompra_${id}`;
+    const existente = localStorage.getItem(clave);
+
+    if (existente) {
+      const confirmar = window.confirm("Ya existe una lista. ¿Quieres añadir a la existente?");
+      if (confirmar) {
+        const actual = JSON.parse(existente);
+        const fusionada = Array.from(new Set([...actual, ...seleccionados]));
+        localStorage.setItem(clave, JSON.stringify(fusionada));
+        alert("Ítems añadidos a la lista existente.");
+      } else {
+        const nuevaClave = `listaCompra_${id}_${Date.now()}`;
+        localStorage.setItem(nuevaClave, JSON.stringify(seleccionados));
+        alert("Se ha creado una nueva lista de la compra.");
+      }
+    } else {
+      localStorage.setItem(clave, JSON.stringify(seleccionados));
+      alert("Lista de la compra creada con los ítems seleccionados.");
+    }
   };
 
   if (!maleta) return null;
-const itemsValidos = maleta.items.filter(
+  const itemsValidos = maleta.items.filter(
     (item) => item && typeof item.nombre === "string" && item.nombre.trim() !== ""
   );
   const totalItems = itemsValidos.length;
@@ -202,6 +237,13 @@ const itemsValidos = maleta.items.filter(
                             {item.nombre}
                           </span>
                         )}
+                        <label style={{ marginLeft: "10px" }}>
+                          <input
+                            type="checkbox"
+                            checked={item.añadirLista || false}
+                            onChange={() => toggleAñadirLista(item.nombre)}
+                          /> Añadir a lista
+                        </label>
                         <button
                           className="btn-borrar"
                           onClick={() => eliminarItem(item.nombre)}
@@ -226,6 +268,10 @@ const itemsValidos = maleta.items.filter(
             placeholder="Añadir ítem"
           />
           <button onClick={añadirItem}>Añadir</button>
+        </div>
+
+        <div className="form-agregar">
+          <button onClick={añadirAListaCompra}>📦 Añadir a lista de la compra</button>
         </div>
       </div>
     </div>

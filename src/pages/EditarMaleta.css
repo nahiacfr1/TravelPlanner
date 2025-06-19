@@ -81,3 +81,20 @@ body {
 .form-agregar button:hover {
   background-color: #5f765e;
 }
+.volver {
+  background-color: #4CAF50; /* Verde suave */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  display: block;         /* Para centrar con margin */
+  margin: 20px auto;      /* Centrado horizontal y separación */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.volver:hover {
+  background-color: #45a049; /* Verde más oscuro al pasar el ratón */
+}

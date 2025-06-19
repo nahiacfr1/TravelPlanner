@@ -1,4 +1,3 @@
-// src/pages/Dashboard.tsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
@@ -13,6 +12,7 @@ interface Viaje {
 function Dashboard() {
   const navigate = useNavigate();
   const [viajes, setViajes] = useState<Viaje[]>([]);
+  const [nombresEditados, setNombresEditados] = useState<Record<string, string>>({});
 
   useEffect(() => {
     const activeUser = localStorage.getItem("activeUser");
@@ -25,6 +25,11 @@ function Dashboard() {
     const users = JSON.parse(localStorage.getItem("users") || "{}");
     const datos = users[activeUser]?.maletas || [];
     setViajes(datos);
+    const nombresIniciales: Record<string, string> = {};
+    datos.forEach((v: Viaje) => {
+      nombresIniciales[v.id] = v.nombre;
+    });
+    setNombresEditados(nombresIniciales);
   }, [navigate]);
 
   const irACrearViaje = () => {
@@ -33,6 +38,37 @@ function Dashboard() {
 
   const entrarAViaje = (id: string) => {
     navigate(`/viaje/${id}`);
+  };
+
+  const actualizarNombre = (id: string) => {
+    const activeUser = localStorage.getItem("activeUser");
+    if (!activeUser) return;
+
+    const users = JSON.parse(localStorage.getItem("users") || "{}");
+    const viajesUsuario = users[activeUser].maletas || [];
+
+    const actualizados = viajesUsuario.map((v: Viaje) =>
+      v.id === id ? { ...v, nombre: nombresEditados[id] } : v
+    );
+
+    users[activeUser].maletas = actualizados;
+    localStorage.setItem("users", JSON.stringify(users));
+    setViajes(actualizados);
+  };
+
+  const eliminarViaje = (id: string) => {
+    const confirmacion = window.confirm("¿Seguro que quieres eliminar este viaje?");
+    if (!confirmacion) return;
+
+    const activeUser = localStorage.getItem("activeUser");
+    if (!activeUser) return;
+
+    const users = JSON.parse(localStorage.getItem("users") || "{}");
+    const nuevosViajes = users[activeUser].maletas.filter((v: Viaje) => v.id !== id);
+    users[activeUser].maletas = nuevosViajes;
+
+    localStorage.setItem("users", JSON.stringify(users));
+    setViajes(nuevosViajes);
   };
 
   return (
@@ -46,8 +82,17 @@ function Dashboard() {
 
         <ul>
           {viajes.map((v) => (
-            <li key={v.id} onClick={() => entrarAViaje(v.id)}>
-              ✈️ {v.nombre}
+            <li key={v.id}>
+              <input
+                type="text"
+                value={nombresEditados[v.id] || ""}
+                onChange={(e) =>
+                  setNombresEditados({ ...nombresEditados, [v.id]: e.target.value })
+                }
+              />
+              <button onClick={() => actualizarNombre(v.id)}>💾 Guardar</button>
+              <button onClick={() => eliminarViaje(v.id)}>🗑️ Eliminar</button>
+              <button onClick={() => entrarAViaje(v.id)}>➡️ Ir al viaje</button>
             </li>
           ))}
         </ul>
