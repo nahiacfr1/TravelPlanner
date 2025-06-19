@@ -24,7 +24,7 @@ function App() {
       <Route element={<PrivateLayout />}>
         <Route path="/viaje/:id/planificar-menu" element={<PlanificarMenu />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/viaje/:id/menu-semanal" element={<MenuSemanal />} />
+        <Route path="/viaje/:id/menu-semanal/:menuId" element={<MenuSemanal />} />
         <Route path="/viaje/:id/ruta-clima" element={<RutaClima />} />
         <Route path="/lista-compra/:viajeId/:idLista" element={<ListaCompra />} />
         <Route path="/crear-viaje" element={<CrearViaje />} />

@@ -57,3 +57,25 @@
   margin-top: 0.5rem;
   text-align: center;
 }
+.bloques-existentes {
+  background-color: #eaf6e8;
+  border: 1px solid #b6d9b0;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.bloques-existentes p {
+  color: #2e4e1d;
+  margin-bottom: 0.5rem;
+}
+
+.ver-menu {
+  background-color: #6fa86f;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}

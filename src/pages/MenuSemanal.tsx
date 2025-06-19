@@ -1,3 +1,4 @@
+// MenuSemanal.tsx
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./MenuSemanal.css";
@@ -18,22 +19,19 @@ interface DiaMenu {
 interface Receta {
   id: string;
   nombre: string;
-  ingredientes?: string[];
+  ingredientes?: string;
 }
 
 function MenuSemanal() {
-  const { id } = useParams();
+  const { id, menuId } = useParams();
   const navigate = useNavigate();
   const [menus, setMenus] = useState<DiaMenu[]>([]);
   const [recetas, setRecetas] = useState<Receta[]>([]);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || !menuId) return;
 
-    const bloques = JSON.parse(localStorage.getItem(`bloquesMenu_${id}`) || "[]");
-    const almacenado = JSON.parse(localStorage.getItem(`menusViaje_${id}`) || "{}");
     const listaRecetas = JSON.parse(localStorage.getItem("recetas") || "[]");
-
     setRecetas(
       listaRecetas.map((r: any, idx: number) => ({
         id: idx.toString(),
@@ -42,25 +40,31 @@ function MenuSemanal() {
       }))
     );
 
+    const keyBloques = `menusViajeList_${id}`;
+    const keyMenus = `menusViaje_${menuId}`;
+    const menusGuardados = JSON.parse(localStorage.getItem(keyMenus) || "{}");
+    const lista = JSON.parse(localStorage.getItem(keyBloques) || "[]");
+    const seleccionado = lista.find((m: any) => m.id === menuId);
+    const bloques = seleccionado?.bloques || [];
+
     const dias: DiaMenu[] = [];
     bloques.forEach((bloque: { inicio: string; fin: string }) => {
       const actual = new Date(bloque.inicio);
       const fin = new Date(bloque.fin);
-
       while (actual <= fin) {
         const fechaStr = actual.toISOString().split("T")[0];
         dias.push({
           fecha: fechaStr,
-          desayuno: almacenado[fechaStr]?.desayuno || "",
-          comida: almacenado[fechaStr]?.comida || "",
-          cena: almacenado[fechaStr]?.cena || "",
+          desayuno: menusGuardados[fechaStr]?.desayuno || "",
+          comida: menusGuardados[fechaStr]?.comida || "",
+          cena: menusGuardados[fechaStr]?.cena || "",
         });
         actual.setDate(actual.getDate() + 1);
       }
     });
 
     setMenus(dias);
-  }, [id]);
+  }, [id, menuId]);
 
   const actualizarMenu = (fecha: string, campo: keyof DiaMenu, valor: string) => {
     const actualizado = menus.map((dia) =>
@@ -68,15 +72,14 @@ function MenuSemanal() {
     );
     setMenus(actualizado);
 
-    const almacenado = JSON.parse(localStorage.getItem(`menusViaje_${id}`) || "{}");
+    const almacenado = JSON.parse(localStorage.getItem(`menusViaje_${menuId}`) || "{}");
     almacenado[fecha] = { ...almacenado[fecha], [campo]: valor };
-    localStorage.setItem(`menusViaje_${id}`, JSON.stringify(almacenado));
+    localStorage.setItem(`menusViaje_${menuId}`, JSON.stringify(almacenado));
   };
 
   const onDragEnd = (result: DropResult) => {
     const { destination, draggableId } = result;
     if (!destination) return;
-
     const [fecha, campo] = destination.droppableId.split("|");
     const receta = recetas.find((r) => r.id === draggableId);
     if (receta) {
@@ -84,64 +87,33 @@ function MenuSemanal() {
     }
   };
 
-const prepararListaCompra = () => {
-  if (!id) return;
-
-  const recetasEnMenu = new Set<string>();
-  menus.forEach((dia) => {
-    ["desayuno", "comida", "cena"].forEach((campo) => {
-      const valor = dia[campo as keyof DiaMenu];
-      if (valor) recetasEnMenu.add(valor);
+  const prepararListaCompra = () => {
+    const recetasEnMenu = new Set<string>();
+    menus.forEach((dia) => {
+      ["desayuno", "comida", "cena"].forEach((campo) => {
+        const valor = dia[campo as keyof DiaMenu];
+        if (valor) recetasEnMenu.add(valor);
+      });
     });
-  });
 
-  const listaRecetas = JSON.parse(localStorage.getItem("recetas") || "[]");
+    const listaRecetas = JSON.parse(localStorage.getItem("recetas") || "[]");
+    const ingredientes = new Set<string>();
 
-  const ingredientes = new Set<string>();
-  listaRecetas.forEach((receta: any) => {
-    if (recetasEnMenu.has(receta.nombre) && typeof receta.ingredientes === "string") {
-      receta.ingredientes
-        .split("\n")
-        .map((linea: string) => linea.trim())
-        .filter((linea: string) => linea !== "")
-        .forEach((ing: string) => ingredientes.add(ing));
+    listaRecetas.forEach((receta: any) => {
+      if (recetasEnMenu.has(receta.nombre)) {
+        (receta.ingredientes || "")
+          .split("\n")
+          .map((linea: string) => linea.trim())
+          .filter((linea: string) => linea !== "")
+          .forEach((ing: string) => ingredientes.add(ing));
+      }
+    });
+
+    if (menuId) {
+      localStorage.setItem(`listaCompra_${menuId}`, JSON.stringify([...ingredientes]));
+      navigate(`/lista-compra/${menuId}`);
     }
-  });
-
-  // Evita lista vacía
-  if (ingredientes.size === 0) {
-    alert("No hay ingredientes en el menú actual.");
-    return;
-  }
-
-  // Creamos nueva lista con ID único y nombre automático con fecha/hora
-  const idLista = Date.now().toString();
-  const fecha = new Date().toLocaleString("es-ES", {
-    day: "2-digit",
-    month: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-  const nuevaLista = {
-    id: idLista,
-    nombre: `Lista ${fecha}`, // Nombre dinámico
-    elementos: [...ingredientes].map((nombre) => ({
-      nombre,
-      completado: false,
-    })),
   };
-
-  // Guardar en el array de listas del viaje
-  const key = `listaCompraList_${id}`;
-  const anteriores = JSON.parse(localStorage.getItem(key) || "[]");
-  const actualizadas = [...anteriores, nuevaLista];
-  localStorage.setItem(key, JSON.stringify(actualizadas));
-
-  // Redirigir a la nueva lista creada
-  navigate(`/lista-compra/${id}/${idLista}`);
-};
-
-
 
   return (
     <div className="menu-semanal">
@@ -184,9 +156,7 @@ const prepararListaCompra = () => {
               <Droppable droppableId={`${dia.fecha}|${campo}`} key={campo}>
                 {(provided, snapshot) => (
                   <div
-                    className={`menu-bloque ${
-                      snapshot.isDraggingOver ? "dragging-over" : ""
-                    }`}
+                    className={`menu-bloque ${snapshot.isDraggingOver ? "dragging-over" : ""}`}
                     ref={provided.innerRef}
                     {...provided.droppableProps}
                   >
