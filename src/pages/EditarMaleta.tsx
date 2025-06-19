@@ -142,32 +142,41 @@ function EditarMaleta() {
     if (!id || !maleta) return;
     const seleccionados = maleta.items
       .filter((item) => item.añadirLista)
-      .map((item) => item.nombre);
+      .map((item) => ({ nombre: item.nombre, completado: false }));
 
     if (seleccionados.length === 0) {
       alert("Selecciona al menos un ítem para añadir a la lista de la compra.");
       return;
     }
 
-    const clave = `listaCompra_${id}`;
-    const existente = localStorage.getItem(clave);
+    const clave = `listaCompraList_${id}`;
+    const listas = JSON.parse(localStorage.getItem(clave) || "[]");
 
-    if (existente) {
-      const confirmar = window.confirm("Ya existe una lista. ¿Quieres añadir a la existente?");
+    if (listas.length > 0) {
+      const confirmar = window.confirm("Ya existe al menos una lista. ¿Quieres añadir a la última existente?");
       if (confirmar) {
-        const actual = JSON.parse(existente);
-        const fusionada = Array.from(new Set([...actual, ...seleccionados]));
-        localStorage.setItem(clave, JSON.stringify(fusionada));
-        alert("Ítems añadidos a la lista existente.");
-      } else {
-        const nuevaClave = `listaCompra_${id}_${Date.now()}`;
-        localStorage.setItem(nuevaClave, JSON.stringify(seleccionados));
-        alert("Se ha creado una nueva lista de la compra.");
+        const ultima = listas[listas.length - 1];
+        const nuevosNombres = new Set([
+          ...ultima.elementos.map((e: { nombre: string }) => e.nombre),
+          ...seleccionados.map((e: { nombre: string }) => e.nombre),
+        ]);
+        ultima.elementos = Array.from(nuevosNombres).map((nombre: string) => ({ nombre, completado: false }));
+        localStorage.setItem(clave, JSON.stringify(listas));
+        alert("Ítems añadidos a la última lista existente.");
+        navigate(`/lista-compra/${id}/${ultima.id}`);
+        return;
       }
-    } else {
-      localStorage.setItem(clave, JSON.stringify(seleccionados));
-      alert("Lista de la compra creada con los ítems seleccionados.");
     }
+
+    const nueva = {
+      id: Date.now().toString(),
+      nombre: `Lista desde maleta ${maleta.nombre}`,
+      elementos: seleccionados,
+    };
+    const actualizadas = [...listas, nueva];
+    localStorage.setItem(clave, JSON.stringify(actualizadas));
+    alert("Se ha creado una nueva lista de la compra.");
+    navigate(`/lista-compra/${id}/${nueva.id}`);
   };
 
   const onDragEnd = (result: DropResult) => {
