@@ -85,6 +85,8 @@ function MenuSemanal() {
   };
 
 const prepararListaCompra = () => {
+  if (!id) return;
+
   const recetasEnMenu = new Set<string>();
   menus.forEach((dia) => {
     ["desayuno", "comida", "cena"].forEach((campo) => {
@@ -97,37 +99,48 @@ const prepararListaCompra = () => {
 
   const ingredientes = new Set<string>();
   listaRecetas.forEach((receta: any) => {
-    if (recetasEnMenu.has(receta.nombre)) {
-      if (typeof receta.ingredientes === "string") {
-        receta.ingredientes
-          .split("\n")
-          .map((linea: string) => linea.trim())
-          .filter((linea: string) => linea !== "")
-          .forEach((ing: string) => ingredientes.add(ing));
-      }
+    if (recetasEnMenu.has(receta.nombre) && typeof receta.ingredientes === "string") {
+      receta.ingredientes
+        .split("\n")
+        .map((linea: string) => linea.trim())
+        .filter((linea: string) => linea !== "")
+        .forEach((ing: string) => ingredientes.add(ing));
     }
   });
 
-  // Creamos la nueva lista
+  // Evita lista vacía
+  if (ingredientes.size === 0) {
+    alert("No hay ingredientes en el menú actual.");
+    return;
+  }
+
+  // Creamos nueva lista con ID único y nombre automático con fecha/hora
   const idLista = Date.now().toString();
+  const fecha = new Date().toLocaleString("es-ES", {
+    day: "2-digit",
+    month: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
   const nuevaLista = {
     id: idLista,
-    nombre: "Lista desde menú",
+    nombre: `Lista ${fecha}`, // Nombre dinámico
     elementos: [...ingredientes].map((nombre) => ({
       nombre,
       completado: false,
     })),
   };
 
-  // Guardamos la lista en la colección del viaje
+  // Guardar en el array de listas del viaje
   const key = `listaCompraList_${id}`;
-  const existentes = JSON.parse(localStorage.getItem(key) || "[]");
-  const actualizadas = [...existentes, nuevaLista];
+  const anteriores = JSON.parse(localStorage.getItem(key) || "[]");
+  const actualizadas = [...anteriores, nuevaLista];
   localStorage.setItem(key, JSON.stringify(actualizadas));
 
-  // Redirigir a esa nueva lista
+  // Redirigir a la nueva lista creada
   navigate(`/lista-compra/${id}/${idLista}`);
 };
+
 
 
   return (
