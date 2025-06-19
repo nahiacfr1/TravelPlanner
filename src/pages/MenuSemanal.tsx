@@ -99,7 +99,10 @@ function MenuSemanal() {
     const ingredientes = new Set<string>();
 
     recetas.forEach((receta) => {
-      if (recetasEnMenu.has(receta.nombre)) {
+      const estaEnMenu = [...recetasEnMenu].some((nombre) =>
+        nombre.trim().toLowerCase() === receta.nombre.trim().toLowerCase()
+      );
+      if (estaEnMenu) {
         (receta.ingredientes || "")
           .split("\n")
           .map((linea: string) => linea.trim())
