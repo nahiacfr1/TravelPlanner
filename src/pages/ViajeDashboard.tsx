@@ -155,6 +155,13 @@ function ViajeDashboard() {
   </div>
 </section>
 <section className="seccion">
+  <h2>🛒 Listas de la compra</h2>
+  <p>Consulta o edita tus listas guardadas para este viaje.</p>
+  <div className="botones-menu">
+    <button onClick={() => navigate(`/viaje/${viaje.id}/listas-compra`)}>🛍️ Ver listas de la compra</button>
+  </div>
+</section>
+<section className="seccion">
   <h2>🚗 Ruta y clima</h2>
   <p>Consulta el tiempo en los lugares por donde pasarás si haces el viaje en coche.</p>
   <div className="botones-menu">

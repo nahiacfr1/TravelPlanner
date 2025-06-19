@@ -98,7 +98,13 @@ function MenuSemanal() {
     const ingredientes = new Set<string>();
     listaRecetas.forEach((receta: any) => {
       if (recetasEnMenu.has(receta.nombre)) {
-        receta.ingredientes?.forEach((ing: string) => ingredientes.add(ing));
+        receta.ingredientes
+  .split("\n")
+  .map((linea: string) => linea.trim())
+  .filter((linea: string) => linea !== "")
+  .forEach((ing: string) => ingredientes.add(ing));
+
+
       }
     });
 
